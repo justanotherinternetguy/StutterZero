@@ -40,7 +40,7 @@ def load_label(label_path):
             index2char[int(index)] = char
     return char2index, index2char
 
-char2index, index2char = load_label('/home/alien/Git/EEModel/label,csv/english_unit.labels')
+char2index, index2char = load_label('/home/alien/Git/StutterZero-Git/EEModel/label,csv/english_unit.labels')
 SOS_token = char2index['<s>']
 EOS_token = char2index['</s>']
 PAD_token = char2index['_']
@@ -271,7 +271,7 @@ def main():
     
     #-------------------------- Data load --------------------------
     train_dataset = SpectrogramDataset(audio_conf,
-                                      "/home/alien/Git/EEModel/label,csv/train.csv",
+                                      "/home/alien/Git/StutterZero-Git/EEModel/label,csv/train.csv",
                                       feature_type=config.audio_data.type,
                                       normalize=True,
                                       spec_augment=True)
@@ -284,7 +284,7 @@ def main():
                                   drop_last=True)
     
     val_dataset = SpectrogramDataset(audio_conf,
-                                    "/home/alien/Git/EEModel/label,csv/test.csv",
+                                    "/home/alien/Git/StutterZero-Git/EEModel/label,csv/test.csv",
                                     feature_type=config.audio_data.type,
                                     normalize=True,
                                     spec_augment=False)

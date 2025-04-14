@@ -111,8 +111,7 @@ def train(model, train_loader, optimizer, criterion, device):
         seqs = seqs.to(device)
         tts_seqs = tts_seqs.to(device)
 
-        mel_outputs_postnet, mel_outputs, txt_outputs = model(seqs, tts_seqs, None, 0)
-        
+        mel_outputs_postnet, mel_outputs, txt_outputs = model(seqs, tts_seqs, None)
         loss = criterion(mel_outputs_postnet, mel_outputs, tts_seqs)
 
         total_loss += loss.item()
@@ -145,7 +144,8 @@ def evaluation(model, val_loader, criterion, device):
     total_batch_num = len(val_loader)
     with torch.no_grad():
         for i, data in enumerate(val_loader):
-            seqs, _, tts_seqs, seq_lengths, target_lengths, tts_seq_lengths = data
+            # seqs, _, tts_seqs, seq_lengths, target_lengths, tts_seq_lengths = data
+            seqs, _, tts_seqs, seq_lengths, target_lengths, tts_seq_lengths, _ = data
             seqs = seqs.to(device) # (batch_size, time, freq)
             tts_seqs = tts_seqs.to(device)
 
@@ -159,7 +159,7 @@ def evaluation(model, val_loader, criterion, device):
     return eval_loss
 
 def main():
-    yaml_name = "/home/alien/Git/EEModel/label,csv/config.yaml"
+    yaml_name = "/home/alien/Git/StutterZero-Git/EEModel/label,csv/config.yaml"
     
     with open("./ee_no_asr.txt", "w") as f:
         f.write(yaml_name)
@@ -228,7 +228,7 @@ def main():
     #-------------------------- Data load --------------------------
     #train dataset
     train_dataset = SpectrogramDataset(audio_conf,
-                                      "/home/alien/Git/EEModel/label,csv/train.csv",
+                                      "/home/alien/Git/StutterZero-Git/EEModel/label,csv/train.csv",
                                       feature_type=config.audio_data.type,
                                       normalize=True,
                                       spec_augment=True)
@@ -237,11 +237,11 @@ def main():
     train_loader = AudioDataLoader(dataset=train_dataset,
                                   shuffle=False,
                                   num_workers=0,
-                                  batch_size=4,
+                                  batch_size=3,
                                   drop_last=True)
     
     val_dataset = SpectrogramDataset(audio_conf,
-                                    "/home/alien/Git/EEModel/label,csv/test.csv",
+                                    "/home/alien/Git/StutterZero-Git/EEModel/label,csv/test.csv",
                                     feature_type=config.audio_data.type,
                                     normalize=True,
                                     spec_augment=False)
@@ -249,7 +249,7 @@ def main():
     val_loader = AudioDataLoader(dataset=val_dataset,
                                 shuffle=False,
                                 num_workers=0,
-                                batch_size=4,
+                                batch_size=3,
                                 drop_last=True)
     
     print(" ")

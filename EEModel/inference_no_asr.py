@@ -179,11 +179,11 @@ def main():
                   dropout=0.5)
     
     model = EEModel_No_ASR(enc, dec).to(device)
-    model.load_state_dict(torch.load("/home/alien/Git/EEModel/plz_load/best_ee_no_asr.pth"))
+    model.load_state_dict(torch.load("/home/alien/Git/StutterZero-Git/EEModel/plz_load/best_ee_no_asr.pth"))
     
     #inference dataset
     val_dataset = SpectrogramDataset(audio_conf, 
-                                     "/home/alien/Git/EEModel/label,csv/test.csv", 
+                                     "/home/alien/Git/StutterZero-Git/EEModel/label,csv/test.csv", 
                                      feature_type=config.audio_data.type,
                                      normalize=True,
                                      spec_augment=False)

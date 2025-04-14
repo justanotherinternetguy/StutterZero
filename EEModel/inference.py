@@ -90,7 +90,7 @@ def compute_cer(preds, labels):
 def inference(model, val_loader, device):
     model.eval()
 
-    yaml_name = "/home/alien/Git/EEModel/label,csv/config.yaml"
+    yaml_name = "/home/alien/Git/StutterZero-Git/EEModel/label,csv/config.yaml"
     
     configfile = open(yaml_name)
     config = AttrDict(yaml.load(configfile, Loader=yaml.FullLoader))
@@ -214,11 +214,11 @@ def main():
     
     model = EEModel(enc, dec, asr_dec).to(device)
 
-    model.load_state_dict(torch.load("/home/alien/Git/EEModel/plz_load_bak/best_ee.pth"))
+    model.load_state_dict(torch.load("/home/alien/Git/StutterZero-Git/EEModel/plz_load_bak/best_parrotron.pth"))
     
     #inference dataset
     val_dataset = SpectrogramDataset(audio_conf, 
-                                     "/home/alien/Git/EEModel/label,csv/test copy 2.csv", 
+                                     "/home/alien/Git/StutterZero-Git/EEModel/label,csv/filtered.csv", 
                                      feature_type=config.audio_data.type,
                                      normalize=True,
                                      spec_augment=False)
