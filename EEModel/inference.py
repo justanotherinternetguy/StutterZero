@@ -214,7 +214,7 @@ def main():
     
     model = EEModel(enc, dec, asr_dec).to(device)
 
-    model.load_state_dict(torch.load("/home/alien/Git/StutterZero-Git/EEModel/plz_load_bak/best_parrotron.pth"))
+    model.load_state_dict(torch.load("/home/alien/Git/StutterZero-Git/EEModel/plz_load_bak/best_ee.pth"))
     
     #inference dataset
     val_dataset = SpectrogramDataset(audio_conf, 

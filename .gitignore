@@ -1,5 +1,5 @@
-/plz_*
-ee_no_asr.txt
-ee.txt
-/test_img*
-/test_wav*
+/EEModel/plz_*
+/EEModel/ee_no_asr.txt
+/EEModel/ee.txt
+/EEModel/test_img*
+/EEModel/test_wav*

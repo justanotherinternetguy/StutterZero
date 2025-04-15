@@ -183,7 +183,7 @@ def main():
     
     #inference dataset
     val_dataset = SpectrogramDataset(audio_conf, 
-                                     "/home/alien/Git/StutterZero-Git/EEModel/label,csv/test.csv", 
+                                     "/home/alien/Git/StutterZero-Git/EEModel/label,csv/filtered.csv", 
                                      feature_type=config.audio_data.type,
                                      normalize=True,
                                      spec_augment=False)
