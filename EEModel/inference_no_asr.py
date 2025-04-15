@@ -89,7 +89,10 @@ def compute_cer(preds, labels):
 
 def inference(model, val_loader, device):
     model.eval()
-
+    yaml_name = "/home/alien/Git/StutterZero-Git/EEModel/label,csv/config.yaml"
+    
+    configfile = open(yaml_name)
+    config = AttrDict(yaml.load(configfile, Loader=yaml.FullLoader))
     total_asr_loss = 0
     total_spec_loss = 0
     total_num = 0
@@ -105,7 +108,11 @@ def inference(model, val_loader, device):
             if i % 10 == 0:
                 print(i)
                 
-            seqs, targets, tts_seqs, seq_lengths, target_lengths, tts_seq_lengths = data
+            # seqs, targets, tts_seqs, seq_lengths, target_lengths, tts_seq_lengths = data
+            seqs, targets, tts_seqs, seq_lengths, target_lengths, tts_seq_lengths, file_names = data
+        
+            
+            
             print(data)
             
             seqs = seqs.to(device) # (batch_size, time, freq)
@@ -116,17 +123,42 @@ def inference(model, val_loader, device):
             mel_outputs_postnet, _, _ = model(seqs, tts_seqs, None)
             # spec = mel_outputs_postnet.squeeze().transpose(0,1).numpy()
             spec = mel_outputs_postnet.to("cuda").squeeze().transpose(0,1).cpu().numpy()
+            SAMPLE_RATE = config.audio_data.sampling_rate
+            WINDOW_SIZE = config.audio_data.window_size
+            WINDOW_STRIDE = config.audio_data.window_stride
+            WINDOW = config.audio_data.window
+            hop_length = int(round(SAMPLE_RATE * 0.001 * WINDOW_STRIDE))
+            
+            # path = './test_wav'
+            # os.makedirs(path, exist_ok=True)
+            # y_inv = librosa.griffinlim(spec, hop_length=200, win_length=500, window='hann')
+            # sf.write('./test_wav/'+ str(i) +'.wav', y_inv, 16000)
+            # #print(y_inv.shape)
 
+            # path1 = './test_img'
+            # os.makedirs(path1, exist_ok=True)
+            # matplotlib.image.imsave('./test_img/'+ str(i) +'.png', spec)
             
             path = './test_wav'
             os.makedirs(path, exist_ok=True)
-            y_inv = librosa.griffinlim(spec, hop_length=200, win_length=500, window='hann')
-            sf.write('./test_wav/'+ str(i) +'.wav', y_inv, 16000)
-            #print(y_inv.shape)
 
+            # Using the filename from the data
+            original_filename = file_names[0]  # Assuming batch size is 1, or you could loop if it's greater
+            file_name_without_extension = os.path.splitext(os.path.basename(original_filename))[0]
+
+            # Reconstructing audio with Griffin-Lim
+            y_inv = librosa.griffinlim(spec, hop_length=hop_length, win_length=800, window='hann')
+
+            # Save the WAV file using the original file name
+            sf.write(os.path.join(path, f"{file_name_without_extension}.wav"), y_inv, 16000)
+
+            # Save the spectrogram as an image in the 'test_img' folder
             path1 = './test_img'
             os.makedirs(path1, exist_ok=True)
-            matplotlib.image.imsave('./test_img/'+ str(i) +'.png', spec)
+
+            # Save the spectrogram image with the same filename as the WAV file
+            img_file_name = f"{file_name_without_extension}.png"
+            matplotlib.image.imsave(os.path.join(path1, img_file_name), spec)
            
     return 
 
@@ -179,7 +211,7 @@ def main():
                   dropout=0.5)
     
     model = EEModel_No_ASR(enc, dec).to(device)
-    model.load_state_dict(torch.load("/home/alien/Git/StutterZero-Git/EEModel/plz_load/best_ee_no_asr.pth"))
+    model.load_state_dict(torch.load("/home/alien/Git/StutterZero-Git/EEModel/plz_load_bak.2/best_parrotron_no_asr.pth"))
     
     #inference dataset
     val_dataset = SpectrogramDataset(audio_conf, 
