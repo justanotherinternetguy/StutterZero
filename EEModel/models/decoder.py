@@ -49,7 +49,6 @@ class Decoder(nn.Module):
         encoder_inputs: Encoder outputs. (B, T, e_F)
         decoder_input: Prenet output. (B, p_F)
                 
-        RETURNS(보류)
         -------
         mel_outputs: mel outputs from the decoder
         gate_outputs: gate outputs from the decoder
