@@ -101,9 +101,7 @@ class ASR_Decoder(nn.Module):
             alignments += [attention_weights]
 
         txt_outputs = torch.stack(txt_outputs).transpose(0, 1).contiguous()
-        
-        # CE 사용할껀데 softmax 필요없지>?        
-        #asr_decoder_outputs = self.softmax(asr_decoder_outputs)
+
 
         return txt_outputs
     
