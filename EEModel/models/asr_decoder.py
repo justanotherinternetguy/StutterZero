@@ -102,6 +102,4 @@ class ASR_Decoder(nn.Module):
 
         txt_outputs = torch.stack(txt_outputs).transpose(0, 1).contiguous()
 
-
         return txt_outputs
-    
