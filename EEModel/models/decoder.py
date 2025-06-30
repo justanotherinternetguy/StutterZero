@@ -179,7 +179,7 @@ class Decoder(nn.Module):
 
             self.memory = self.memory_layer(encoder_inputs)
 
-            decoder_input = go_frame
+            # decoder_input = go_frame
 
             while len(mel_outputs) < max_len - 1:
                 decoder_input = self.pre_net(decoder_input) # B, T, F (prenet output) 
@@ -196,8 +196,3 @@ class Decoder(nn.Module):
         final_mel_outputs = mel_outputs + mel_outputs_postnet.transpose(1, 2)
 
         return final_mel_outputs    
-
-
-   
-
-    
